@@ -1,36 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { ApiTags } from '@nestjs/swagger';
 
-@Controller('posts')
-@ApiTags('posts')
-export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { CreateNewsPostDto } from './dto/create-post.dto';
+import { UpdateNewsPostDto } from './dto/update-post.dto';
+import { NewsService } from './posts.service';
+
+@Controller('news')
+export class NewsController {
+  constructor(private readonly newsService: NewsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  create(@Body() createNewsPostDto: CreateNewsPostDto) {
+    return this.newsService.create(createNewsPostDto);
   }
 
   @Get()
   findAll() {
-    return this.postsService.findAll();
+    return this.newsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.newsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  @Put(':id')
+  update(@Param('id') id: number, @Body() updateNewsPostDto: UpdateNewsPostDto) {
+    return this.newsService.update(id, updateNewsPostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.newsService.remove(id);
   }
 }

@@ -4,6 +4,8 @@ import ErrorPage from "../pages/ErrorPage";
 import Profile from "../pages/Profile";
 import Auth from "../pages/Auth";
 import Home from "../pages/Home";
+import Posts from "../pages/Posts";
+import Files from "../pages/Files";
 
 export const router = createBrowserRouter([
     {
@@ -24,10 +26,12 @@ export const router = createBrowserRouter([
             element: <Profile />
         },
         {
-            //FILES
+            path: 'files',
+            element: <Files />
         },
         {
-            //POSTS??????
+            path: 'posts',
+            element: <Posts />
         }
        ]
     }

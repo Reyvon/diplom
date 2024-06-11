@@ -9,7 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { FilesEntity } from './files/entities/file.entity';
 import { User } from './user/entities/user.entity';
 import { Auth } from './auth/entities/auth.entity';
-import { PostsModule } from './posts/posts.module';
+import { NewsModule } from './posts/posts.module';
+import { NewsPost } from './posts/entities/post.entity';
 
 @Module({
   imports: [
@@ -26,10 +27,10 @@ import { PostsModule } from './posts/posts.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         synchronize: true,
-        entities: [FilesEntity, User, Auth],
+        entities: [FilesEntity, User, Auth, NewsPost],
       }),
       inject: [ConfigService]
-    }), AuthModule, PostsModule],
+    }), AuthModule, NewsModule],
   controllers: [AppController],
   providers: [AppService],
 })

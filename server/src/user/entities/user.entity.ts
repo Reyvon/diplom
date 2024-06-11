@@ -1,5 +1,7 @@
 import { FilesEntity } from "src/files/entities/file.entity";
+import { NewsPost } from "src/posts/entities/post.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
 
 export enum UserRole {
     ADMIN = 'admin',
@@ -27,4 +29,7 @@ export class User {
 
     @OneToMany(() => FilesEntity, (file) => file.user)
     files: FilesEntity[]
+
+    @OneToMany(() => NewsPost, (post) => post.user)
+  posts: NewsPost[];
 }
