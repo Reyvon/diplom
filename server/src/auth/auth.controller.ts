@@ -10,9 +10,8 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
-  
   @Post('login')
-  @ApiBody({type: CreateUserDto})
+  @ApiBody({ type: CreateUserDto })
   @UseGuards(LocalAuthGuard)
   async login(@Request() req) {
     return this.authService.login(req.user);
@@ -20,8 +19,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
-    console.log(req.user)
-    return req.user;
+  async getProfile(@Request() req) {
+    return this.authService.getProfile(req.user.id);
   }
 }

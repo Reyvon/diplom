@@ -11,6 +11,7 @@ import { User } from './user/entities/user.entity';
 import { Auth } from './auth/entities/auth.entity';
 import { PostEntity } from './posts/entities/post.entity';
 import { PostModule } from './posts/posts.module';
+import { Fullname } from './user/entities/fullname.entity';
 
 
 @Module({
@@ -28,7 +29,7 @@ import { PostModule } from './posts/posts.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         synchronize: true,
-        entities: [FilesEntity, User, Auth, PostEntity],
+        entities: [FilesEntity, User, Auth, PostEntity, Fullname],
       }),
       inject: [ConfigService]
     }), AuthModule, PostModule],

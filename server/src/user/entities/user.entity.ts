@@ -1,6 +1,7 @@
 import { FilesEntity } from "src/files/entities/file.entity";
 import { PostEntity } from "src/posts/entities/post.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Fullname } from "./fullname.entity";
 
 
 export enum UserRole {
@@ -31,7 +32,11 @@ export class User {
     files: FilesEntity[]
 
     @OneToMany(() => PostEntity, post => post.user)
-  posts: PostEntity[];
+    posts: PostEntity[];
+
+    @ManyToOne(() => Fullname, { eager: true, cascade: true }) // Make sure Fullname entity is correctly configured
+  @JoinColumn({ name: 'fullNameId' })
+  fullName: Fullname;
    
     @Column({default: null})
     degree: string;
@@ -42,3 +47,4 @@ export class User {
     @Column({default: null})
     info: string;
 }
+
