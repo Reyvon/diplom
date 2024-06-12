@@ -17,6 +17,11 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Get('teachers')
+  async getAllTeachers() {
+    return this.userService.findAllTeachers();
+  }
+
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
