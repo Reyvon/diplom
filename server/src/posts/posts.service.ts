@@ -1,66 +1,71 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateNewsPostDto } from './dto/create-post.dto';
-import { UpdateNewsPostDto } from './dto/update-post.dto';
-import { NewsPost } from './entities/post.entity';
-import { User } from '../user/entities/user.entity';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { User } from 'src/user/entities/user.entity';
+import { PostEntity } from './entities/post.entity';
 
 @Injectable()
-export class NewsService {
+export class PostService {
   constructor(
-    @InjectRepository(NewsPost)
-    private newsPostRepository: Repository<NewsPost>,
+    @InjectRepository(PostEntity)
+    private readonly postRepository: Repository<PostEntity>,
     @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createNewsPostDto: CreateNewsPostDto): Promise<NewsPost> {
-    const user = await this.userRepository.findOne({ where: { id: createNewsPostDto.userId } });
+  async create(createPostDto: CreatePostDto): Promise<PostEntity> {
+    const user = await this.userRepository.findOne({ where: { id: createPostDto.userId } });
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException(`User with ID ${createPostDto.userId} not found`);
     }
 
-    const newPost = this.newsPostRepository.create({
-      ...createNewsPostDto,
-      user,
-    });
+    const post = new PostEntity();
+    post.title = createPostDto.title;
+    post.author = createPostDto.author;
+    post.content = createPostDto.content;
+    post.user = user;
 
-    return this.newsPostRepository.save(newPost);
+    return this.postRepository.save(post);
   }
 
-  async findAll(): Promise<NewsPost[]> {
-    return this.newsPostRepository.find({ relations: ['user'] });
+  async findAll(): Promise<PostEntity[]> {
+    return this.postRepository.find({ relations: ['user'] });
   }
 
-  async findOne(id: number): Promise<NewsPost> {
-    const post = await this.newsPostRepository.findOne({ where: { id }, relations: ['user'] });
+  async findOne(id: number): Promise<PostEntity> {
+    const post = await this.postRepository.findOne({ where: { id }, relations: ['user'] });
     if (!post) {
-      throw new NotFoundException('News post not found');
+      throw new NotFoundException(`Post with ID ${id} not found`);
     }
     return post;
   }
 
-  async update(id: number, updateNewsPostDto: UpdateNewsPostDto): Promise<NewsPost> {
-    const post = await this.findOne(id);
-
-    if (updateNewsPostDto.userId) {
-      const user = await this.userRepository.findOne({ where: { id: updateNewsPostDto.userId } });
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-      post.user = user;
+  async update(id: number, updatePostDto: UpdatePostDto): Promise<PostEntity> {
+    const post = await this.postRepository.findOne({ where: { id } });
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
     }
 
-    Object.assign(post, updateNewsPostDto);
+    if (updatePostDto.title) {
+      post.title = updatePostDto.title;
+    }
+    if (updatePostDto.author) {
+      post.author = updatePostDto.author;
+    }
+    if (updatePostDto.content) {
+      post.content = updatePostDto.content;
+    }
 
-    return this.newsPostRepository.save(post);
+    return this.postRepository.save(post);
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.newsPostRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException('News post not found');
+    const post = await this.postRepository.findOne({ where: { id } });
+    if (!post) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
     }
+    await this.postRepository.remove(post);
   }
 }

@@ -1,19 +1,6 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
 
-export class UpdateNewsPostDto {
-  @IsOptional()
-  @IsString()
-  title?: string;
-
-  @IsOptional()
-  @IsString()
-  author?: string;
-
-  @IsOptional()
-  @IsString()
-  content?: string;
-
-  @IsOptional()
-  @IsNumber()
-  userId?: number; 
+export class UpdatePostDto {
+  readonly title?: string;
+  readonly author?: string;
+  readonly content?: string;
 }

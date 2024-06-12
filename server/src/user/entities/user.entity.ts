@@ -1,5 +1,5 @@
 import { FilesEntity } from "src/files/entities/file.entity";
-import { NewsPost } from "src/posts/entities/post.entity";
+import { PostEntity } from "src/posts/entities/post.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -30,6 +30,15 @@ export class User {
     @OneToMany(() => FilesEntity, (file) => file.user)
     files: FilesEntity[]
 
-    @OneToMany(() => NewsPost, (post) => post.user)
-  posts: NewsPost[];
+    @OneToMany(() => PostEntity, post => post.user)
+  posts: PostEntity[];
+   
+    @Column({default: null})
+    degree: string;
+
+    @Column({default: null})
+    due: string;
+
+    @Column({default: null})
+    info: string;
 }

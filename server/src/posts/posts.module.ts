@@ -1,13 +1,14 @@
-import { Module } from '@nestjs/common';
-import { NewsService } from './posts.service';
-import { NewsController } from './posts.controller';
+import { Module, Post } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NewsPost } from './entities/post.entity';
-import { UserModule } from 'src/user/user.module';
+import { User } from 'src/user/entities/user.entity';
+import { PostService } from './posts.service';
+import { PostController } from './posts.controller';
+import { PostEntity } from './entities/post.entity';
+
 
 @Module({
-  imports: [TypeOrmModule.forFeature([NewsPost]),UserModule,],
-  controllers: [NewsController],
-  providers: [NewsService],
+  imports: [TypeOrmModule.forFeature([PostEntity, User])],
+  providers: [PostService],
+  controllers: [PostController],
 })
-export class NewsModule {}
+export class PostModule {}

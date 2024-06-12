@@ -1,35 +1,37 @@
+import { Controller, Get, Post as HttpPost, Body, Param, Patch, Delete } from '@nestjs/common';
 
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
-import { CreateNewsPostDto } from './dto/create-post.dto';
-import { UpdateNewsPostDto } from './dto/update-post.dto';
-import { NewsService } from './posts.service';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostService } from './posts.service';
+import { PostEntity } from './entities/post.entity';
 
-@Controller('news')
-export class NewsController {
-  constructor(private readonly newsService: NewsService) {}
 
-  @Post()
-  create(@Body() createNewsPostDto: CreateNewsPostDto) {
-    return this.newsService.create(createNewsPostDto);
+@Controller('posts')
+export class PostController {
+  constructor(private readonly postService: PostService) {}
+
+  @HttpPost()
+  create(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
+    return this.postService.create(createPostDto);
   }
 
   @Get()
-  findAll() {
-    return this.newsService.findAll();
+  findAll(): Promise<PostEntity[]> {
+    return this.postService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    return this.newsService.findOne(id);
+  findOne(@Param('id') id: number): Promise<PostEntity> {
+    return this.postService.findOne(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: number, @Body() updateNewsPostDto: UpdateNewsPostDto) {
-    return this.newsService.update(id, updateNewsPostDto);
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() updatePostDto: UpdatePostDto): Promise<PostEntity> {
+    return this.postService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    return this.newsService.remove(id);
+  remove(@Param('id') id: number): Promise<void> {
+    return this.postService.remove(id);
   }
 }

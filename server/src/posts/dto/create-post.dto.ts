@@ -1,20 +1,12 @@
+import { ApiProperty } from "@nestjs/swagger";
 
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
-
-export class CreateNewsPostDto {
-  @IsNotEmpty()
-  @IsString()
-  title: string;
-
-  @IsNotEmpty()
-  @IsString()
-  author: string;
-
-  @IsNotEmpty()
-  @IsString()
-  content: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  userId: number; 
+export class CreatePostDto {
+  @ApiProperty()
+  readonly title: string;
+  @ApiProperty()
+  readonly author: string;
+  @ApiProperty()
+  readonly content: string;
+  @ApiProperty()
+  readonly userId: number;
 }
