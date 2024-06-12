@@ -25,13 +25,22 @@ export class PostService {
     post.title = createPostDto.title;
     post.author = createPostDto.author;
     post.content = createPostDto.content;
+    post.images = createPostDto.images || [];
     post.user = user;
 
     return this.postRepository.save(post);
   }
 
-  async findAll(): Promise<PostEntity[]> {
-    return this.postRepository.find({ relations: ['user'] });
+  async findAll(page: number = 1, limit: number = 10): Promise<{ data: PostEntity[], total: number }> {
+    const [result, total] = await this.postRepository.findAndCount({
+      relations: ['user'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return {
+      data: result,
+      total,
+    };
   }
 
   async findOne(id: number): Promise<PostEntity> {
@@ -56,6 +65,9 @@ export class PostService {
     }
     if (updatePostDto.content) {
       post.content = updatePostDto.content;
+    }
+    if (updatePostDto.images) {
+      post.images = updatePostDto.images;
     }
 
     return this.postRepository.save(post);

@@ -15,6 +15,9 @@ export class PostEntity {
   @Column()
   content: string;
 
+  @Column('text', { array: true, nullable: true })
+  images: string[];
+
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
 }
