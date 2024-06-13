@@ -22,6 +22,11 @@ export class UserController {
     return this.userService.findAllTeachers();
   }
 
+  @Get('teacher/:id')
+  async getTeacherById(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findTeacherById(id);
+  }
+
   @Patch(':id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -29,5 +34,4 @@ export class UserController {
   ) {
     return this.userService.update(id, updateUserDto);
   }
-
 }

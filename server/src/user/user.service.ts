@@ -50,6 +50,17 @@ export class UserService {
     });
   }
 
+  async findTeacherById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
+      where: { id, role: UserRole.TEACHER },
+      relations: ['fullName'],
+    });
+    if (!user) {
+      throw new NotFoundException(`Teacher with id ${id} not found`);
+    }
+    return user;
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id);
     if (!user) throw new NotFoundException('User not found');
