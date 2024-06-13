@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, UseGuards, Query, Param } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -65,5 +65,10 @@ export class FilesController {
   remove(@UserId() userId: number, @Query('ids') ids: string) {
     // files?ids=1,2,3,4
     return this.filesService.remove(userId, ids);
+  }
+
+  @Delete(':id')
+  removeById(@Param('id') id: number) {
+    return this.filesService.removeById(id);
   }
 }

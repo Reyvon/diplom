@@ -59,4 +59,8 @@ export class FilesService {
 
     return qb.softDelete().execute();
   }
+
+  async removeById(fileId: number) {
+    return this.repository.softDelete(fileId);
+  }
 }
