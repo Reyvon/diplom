@@ -24,6 +24,11 @@ export class FilesController {
     return this.filesService.findAllFiles();
   }
   
+  @Get('subjects')
+  findAllSubjects() {
+    return this.filesService.findAllSubjects();
+  }
+
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {

@@ -34,6 +34,16 @@ export class FilesService {
   findAllFiles() {
     return this.repository.find();
   }
+
+  async findAllSubjects(): Promise<string[]> {
+    const subjects = await this.repository
+      .createQueryBuilder('file')
+      .select('DISTINCT file.subject', 'subject')
+      .where('file.subject IS NOT NULL')
+      .getRawMany();
+
+    return subjects.map(subject => subject.subject);
+  }
   
   create(file: Express.Multer.File, userId: number, description?: string, subject?: string) {
     return this.repository.save({
