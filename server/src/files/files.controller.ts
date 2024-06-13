@@ -41,6 +41,9 @@ export class FilesController {
         },
         description: {
           type: 'string',
+        },
+        subject: {
+          type: 'string',
         }
       }
     }
@@ -53,8 +56,9 @@ export class FilesController {
     ) file: Express.Multer.File,
     @UserId() userId: number,
     @Body('description') description: string,
+    @Body('subject') subject: string,
   ) {
-    return this.filesService.create(file, userId, description);
+    return this.filesService.create(file, userId, description, subject);
   }
 
   @Delete()

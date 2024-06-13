@@ -30,6 +30,9 @@ export class FilesEntity {
     @Column({ nullable: true })
     description?: string;
 
+    @Column({ nullable: true })
+    subject?: string;
+    
     @DeleteDateColumn()
     deletedAt?: Date;
 }

@@ -35,7 +35,7 @@ export class FilesService {
     return this.repository.find();
   }
   
-  create(file: Express.Multer.File, userId: number, description?: string) {
+  create(file: Express.Multer.File, userId: number, description?: string, subject?: string) {
     return this.repository.save({
       filename: file.filename,
       originalname: file.originalname,
@@ -43,6 +43,7 @@ export class FilesService {
       mimetype: file.mimetype,
       user: { id: userId },
       description,
+      subject,
     });
   }
   
