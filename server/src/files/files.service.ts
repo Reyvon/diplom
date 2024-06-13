@@ -1,24 +1,20 @@
-import { Injectable, Query } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileType, FilesEntity } from './entities/file.entity';
 import { Repository } from 'typeorm';
-
-
-
 
 @Injectable()
 export class FilesService {
   constructor(
     @InjectRepository(FilesEntity)
-    private repository: Repository<File>
+    private repository: Repository<FilesEntity>
   ) {}
-
-
 
   findAll(userId: number, fileType: FileType) {
     const qb = this.repository.createQueryBuilder('file');
-
-    qb.where('file.userId = :userId', { userId });
+    
+    qb.leftJoinAndSelect('file.user', 'user')
+      .where('file.userId = :userId', { userId });
 
     if (fileType === FileType.PHOTOS) {
       qb.andWhere('file.mimetype ILIKE :type', { type: '%image%' });
@@ -35,13 +31,14 @@ export class FilesService {
     return qb.getMany();
   }
 
-  create(file: Express.Multer.File, userId: number) {
+  create(file: Express.Multer.File, userId: number, description?: string) {
     return this.repository.save({
       filename: file.filename,
       originalname: file.originalname,
       size: file.size,
       mimetype: file.mimetype,
       user: { id: userId },
+      description,
     });
   }
   
@@ -57,5 +54,4 @@ export class FilesService {
 
     return qb.softDelete().execute();
   }
-  
 }

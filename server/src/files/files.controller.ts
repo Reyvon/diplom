@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Delete, UseInterceptors, UploadedFile, ParseFilePipe, MaxFileSizeValidator, UseGuards, Query } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -6,8 +6,6 @@ import { fileStorage } from './storage';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { UserId } from 'src/types/user-id.decorator';
 import { FileType } from './entities/file.entity';
-
-
 
 @Controller('files')
 @ApiTags('files')
@@ -21,12 +19,11 @@ export class FilesController {
     return this.filesService.findAll(userId, fileType);
   }
 
-
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
-    storage: fileStorage
-  })
+      storage: fileStorage
+    })
   )
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -36,20 +33,23 @@ export class FilesController {
         file: {
           type: 'string',
           format: 'binary',
+        },
+        description: {
+          type: 'string',
         }
       }
     }
   })
-
-  create(@UploadedFile(
-    new ParseFilePipe({
-      validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 })],
-    }),
-  ) 
-  file: Express.Multer.File,
-  @UserId() userId: number) 
-  {
-    return this.filesService.create(file, userId);
+  create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 10 })],
+      }),
+    ) file: Express.Multer.File,
+    @UserId() userId: number,
+    @Body('description') description: string,
+  ) {
+    return this.filesService.create(file, userId, description);
   }
 
   @Delete()
@@ -57,5 +57,4 @@ export class FilesController {
     // files?ids=1,2,3,4
     return this.filesService.remove(userId, ids);
   }
-
 }
