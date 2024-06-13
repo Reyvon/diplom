@@ -31,6 +31,10 @@ export class FilesService {
     return qb.getMany();
   }
 
+  findAllFiles() {
+    return this.repository.find();
+  }
+  
   create(file: Express.Multer.File, userId: number, description?: string) {
     return this.repository.save({
       filename: file.filename,

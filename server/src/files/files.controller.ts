@@ -19,6 +19,11 @@ export class FilesController {
     return this.filesService.findAll(userId, fileType);
   }
 
+  @Get('all')
+  findAllFiles() {
+    return this.filesService.findAllFiles();
+  }
+  
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
