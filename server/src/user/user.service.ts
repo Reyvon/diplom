@@ -55,7 +55,7 @@ export class UserService {
       where: { role: UserRole.STUDENT },
     });
   }
-  
+
   async findAllUsers(): Promise<User[]> {
     return this.userRepository.find({ relations: ['fullName'] });
   }
@@ -71,6 +71,14 @@ export class UserService {
     return user;
   }
 
+  async delete(id: number): Promise<void> {
+    const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.userRepository.remove(user);
+  }
+  
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.findById(id);
     if (!user) throw new NotFoundException('User not found');
