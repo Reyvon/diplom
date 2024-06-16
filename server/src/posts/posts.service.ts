@@ -80,4 +80,23 @@ export class PostService {
     }
     await this.postRepository.remove(post);
   }
+  
+  async findByUser(userId: number, page: number = 1, limit: number = 10): Promise<{ data: PostEntity[], total: number }> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    const [result, total] = await this.postRepository.findAndCount({
+      where: { user: { id: userId } },
+      relations: ['user'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data: result,
+      total,
+    };
+  }
 }

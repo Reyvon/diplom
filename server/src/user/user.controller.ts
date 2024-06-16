@@ -22,6 +22,11 @@ export class UserController {
     return this.userService.findAllTeachers();
   }
 
+  @Get('students')
+  async getAllStudents() {
+    return this.userService.findAllStudents();
+  }
+
   @Get('teacher/:id')
   async getTeacherById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.findTeacherById(id);

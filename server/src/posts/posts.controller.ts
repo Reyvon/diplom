@@ -32,4 +32,13 @@ export class PostController {
   remove(@Param('id') id: number): Promise<void> {
     return this.postService.remove(id);
   }
+  
+  @Get('user/:userId')
+  findByUser(
+    @Param('userId') userId: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10
+  ): Promise<{ data: PostEntity[], total: number }> {
+    return this.postService.findByUser(userId, page, limit);
+  }
 }

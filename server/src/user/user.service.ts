@@ -50,6 +50,13 @@ export class UserService {
     });
   }
 
+  async findAllStudents(): Promise<User[]> {
+    return await this.userRepository.find({
+      where: { role: UserRole.STUDENT },
+    });
+  }
+
+
   async findTeacherById(id: number): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id, role: UserRole.TEACHER },
