@@ -40,4 +40,8 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
+  @Get()
+  async getAllUsers() {
+    return this.userService.findAllUsers();
+  }
 }
